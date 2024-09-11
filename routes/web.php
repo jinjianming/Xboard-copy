@@ -50,3 +50,5 @@ Route::get('/' . admin_setting('secure_path', admin_setting('frontend_admin_path
         'secure_path' => admin_setting('secure_path', admin_setting('frontend_admin_path', hash('crc32b', config('app.key'))))
     ]);
 });
+// 自定义路径
+Route::get(env('APP_PATH'), 'V1\\Client\\ClientController@subscribe')->middleware('client');

@@ -69,9 +69,9 @@ class Surge
         }
 
         // Subscription link
-        $subsURL = Helper::getSubscribeUrl("/api/v1/client/subscribe?token={$user['token']}");
+        $subsURL = Helper::getSubscribeUrl(env('APP_PATH') . "?token={$user['token']}");
         $subsDomain = request()->header('Host');
-        $subsURL = 'https://' . $subsDomain . '/api/v1/client/subscribe?token=' . $user['token'];
+        $subsURL = 'https://' . $subsDomain . env('APP_PATH') . '?token=' . $user['token'];
 
         $config = str_replace('$subs_link', $subsURL, $config);
         $config = str_replace('$subs_domain', $subsDomain, $config);
@@ -178,12 +178,12 @@ class Surge
             "password={$password}",
             "download-bandwidth={$server['up_mbps']}",
             $server['server_name'] ? "sni={$server['server_name']}" : "",
-            // 'tfo=true', 
+            // 'tfo=true',
             'udp-relay=true'
         ];
         if ($server['insecure']) {
             $config[] = $server['insecure'] ? 'skip-cert-verify=true' : 'skip-cert-verify=false';
-        }    
+        }
         $config = array_filter($config);
         $uri = implode(',', $config);
         $uri .= "\r\n";
