@@ -38,6 +38,8 @@ class EPay
             'name' => $order['trade_no'],
             'notify_url' => $order['notify_url'],
             'return_url' => $order['return_url'],
+            // 'return_url' => $_SERVER['HTTP_REFERER'] . '#/dashboard/checkout/' . $order['trade_no'],
+            'return_url' => $_SERVER['HTTP_REFERER'] . '#/order/' . $order['trade_no'],
             'out_trade_no' => $order['trade_no'],
             'pid' => $this->config['pid']
         ];
