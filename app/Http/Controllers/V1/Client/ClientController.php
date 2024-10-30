@@ -153,7 +153,7 @@ class ClientController extends Controller
         if (!isset($servers[0]))
             return;
         if ($rejectServerCount > 0) {
-            array_unshift($servers, array_merge($servers[0], [
+            array_push($servers, array_merge($servers[0], [
                 'name' => "过滤掉{$rejectServerCount}条线路",
             ]));
         }
@@ -163,20 +163,49 @@ class ClientController extends Controller
         $totalTraffic = $user['transfer_enable'];
         $remainingTraffic = Helper::trafficConvert($totalTraffic - $useTraffic);
         $expiredDate = $user['expired_at'] ? date('Y-m-d', $user['expired_at']) : '长期有效';
+        $userEmail = $user['email'];
+
+        // 解析plan信息
+        $planName = isset($user['plan']['name']) ? $user['plan']['name'] : '未知套餐';
+
         $userService = new UserService();
         $resetDay = $userService->getResetDay($user);
-        array_unshift($servers, array_merge($servers[0], [
-            'name' => "套餐到期：{$expiredDate}",
+        $currentTime = date('Y-m-d H:i:s');
+
+        array_push($servers, array_merge($servers[0], [
+            'name' => "----- 账号信息 -----",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "登陆账号：{$userEmail}",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "{$planName}：{$expiredDate}",
         ]));
         if ($resetDay) {
-            array_unshift($servers, array_merge($servers[0], [
-                'name' => "距离下次重置剩余：{$resetDay} 天",
+            array_push($servers, array_merge($servers[0], [
+                'name' => "流量重置：剩余{$resetDay}天，剩余流量：{$remainingTraffic}",
             ]));
         }
-        array_unshift($servers, array_merge($servers[0], [
-            'name' => "剩余流量：{$remainingTraffic}",
+        array_push($servers, array_merge($servers[0], [
+            'name' => "上次更新时间：{$currentTime}",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "----- 联系我们 -----",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "官网：budingcat.top",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "邮箱：service@budingcat.xyz",
+        ]));
+        array_push($servers, array_merge($servers[0], [
+            'name' => "FAQ：如遇到节点大量失败请尝试更新订阅",
         ]));
     }
+
+
+
+
 
 
     /**
